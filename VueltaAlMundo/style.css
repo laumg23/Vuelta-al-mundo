@@ -55,6 +55,7 @@ body {
 
 #hero {
   background: rgba(255, 255, 255, 0.94);
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
@@ -73,7 +74,9 @@ body {
 
   font-size: 22px;
   line-height: 1.15;
+
   font-weight: 800;
+
   letter-spacing: -0.7px;
 
   color: #172033;
@@ -88,6 +91,7 @@ body {
   color: #7d8490;
 
   letter-spacing: 0.9px;
+
   text-transform: uppercase;
 }
 
@@ -101,13 +105,16 @@ body {
 
   top: 18px;
   left: 50%;
+
   transform: translateX(-50%);
 
   z-index: 1000;
 
   display: flex;
+
   align-items: center;
-  gap: 10px;
+
+  gap: 8px;
 
   pointer-events: none;
 }
@@ -118,23 +125,25 @@ body {
    ========================================== */
 
 #stats .card {
-  min-width: 126px;
-  height: 74px;
+  min-width: 112px;
+  height: 64px;
 
-  padding: 13px 17px;
+  padding: 10px 14px;
 
   background: rgba(255, 255, 255, 0.96);
 
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  border-radius: 15px;
+  border-radius: 13px;
 
   box-shadow:
-    0 7px 22px rgba(0, 0, 0, 0.08);
+    0 6px 18px rgba(0, 0, 0, 0.07);
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: flex-start;
 }
 
@@ -146,12 +155,13 @@ body {
 
   height: 11px;
 
-  font-size: 10px;
+  font-size: 9px;
+
   line-height: 11px;
 
   color: #747b87;
 
-  letter-spacing: 1.2px;
+  letter-spacing: 1.1px;
 
   font-weight: 500;
 }
@@ -160,19 +170,21 @@ body {
 /* número */
 
 #stats .card h2 {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
 
-  height: 24px;
+  height: 22px;
 
   display: flex;
+
   align-items: center;
 
-  font-size: 24px;
-  line-height: 24px;
+  font-size: 21px;
+
+  line-height: 22px;
 
   font-weight: 700;
 
-  letter-spacing: -0.8px;
+  letter-spacing: -0.7px;
 
   color: #172033;
 }
@@ -181,16 +193,17 @@ body {
 /* unidad */
 
 #stats .card small {
-  margin-top: 4px;
+  margin-top: 3px;
 
-  height: 9px;
+  height: 8px;
 
-  font-size: 9px;
-  line-height: 9px;
+  font-size: 8px;
+
+  line-height: 8px;
 
   color: #9aa0a8;
 
-  letter-spacing: 1px;
+  letter-spacing: 0.9px;
 }
 
 
@@ -199,38 +212,44 @@ body {
    ========================================== */
 
 #stats .status {
-  height: 44px;
+  height: 38px;
 
   display: flex;
+
   align-items: center;
 
-  padding: 0 17px;
+  padding: 0 14px;
 
   background: rgba(226, 244, 233, 0.96);
 
-  border-radius: 14px;
+  border-radius: 12px;
 
   color: #18864b;
 
-  font-size: 13px;
+  font-size: 12px;
+
   font-weight: 700;
 
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
 
   box-shadow:
-    0 7px 22px rgba(0, 0, 0, 0.07);
+    0 6px 18px rgba(0, 0, 0, 0.06);
 
   position: relative;
 }
 
 
-/* Punto de ubicación en tiempo real */
+/* ==========================================
+   PUNTO DE UBICACIÓN EN TIEMPO REAL
+   ========================================== */
 
 #stats .status::before {
   content: "";
 
   width: 7px;
   height: 7px;
+
+  flex-shrink: 0;
 
   margin-right: 6px;
 
@@ -244,7 +263,10 @@ body {
   animation: liveLocation 1.8s infinite;
 }
 
-/* Pulso */
+
+/* ==========================================
+   ANIMACIÓN DEL PUNTO
+   ========================================== */
 
 @keyframes liveLocation {
 
@@ -261,6 +283,8 @@ body {
   100% {
     box-shadow:
       0 0 0 0 rgba(21, 148, 71, 0);
+  }
+
 }
 
 
@@ -279,7 +303,9 @@ body {
   z-index: 1000;
 
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
 }
 
@@ -334,6 +360,7 @@ body {
   color: #159447;
 
   font-size: 11px;
+
   font-weight: 700;
 
   letter-spacing: 1.7px;
@@ -348,6 +375,7 @@ body {
   margin: 0;
 
   font-size: 30px;
+
   line-height: 1.05;
 
   font-weight: 500;
@@ -393,7 +421,9 @@ body {
   padding: 0 18px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   font-size: 14px;
@@ -403,10 +433,13 @@ body {
 
 .countriesCard strong {
   min-width: 30px;
+
   height: 27px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   padding: 0 8px;
@@ -427,6 +460,7 @@ body {
 
 #fitRoutes {
   width: 100%;
+
   height: 54px;
 
   border: 1px solid rgba(214, 31, 38, 0.45);
@@ -440,6 +474,7 @@ body {
   font-family: "Inter", Arial, sans-serif;
 
   font-size: 12px;
+
   font-weight: 700;
 
   letter-spacing: 1px;
@@ -477,6 +512,7 @@ body {
   bottom: 24px;
 
   width: 330px;
+
   max-height: 62vh;
 
   z-index: 1000;
@@ -505,7 +541,9 @@ body {
   padding: 0 18px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   border-bottom: 1px solid #eceef1;
@@ -525,10 +563,13 @@ body {
 
 #stageCounter {
   min-width: 31px;
+
   height: 31px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   border-radius: 50%;
@@ -538,6 +579,7 @@ body {
   color: #ffffff;
 
   font-size: 13px;
+
   font-weight: 700;
 }
 
@@ -586,7 +628,9 @@ body {
   border-bottom: 1px solid #f0f1f3;
 
   display: flex;
+
   align-items: flex-end;
+
   justify-content: space-between;
 }
 
@@ -741,6 +785,7 @@ body {
 
 .leaflet-control-zoom a {
   width: 38px !important;
+
   height: 38px !important;
 
   line-height: 38px !important;
@@ -766,6 +811,7 @@ body {
 
   #hero {
     padding: 13px 16px;
+
     max-width: 220px;
   }
 
@@ -793,6 +839,7 @@ body {
 
   #stats .card {
     min-width: 82px;
+
     height: 61px;
 
     padding: 10px 12px;
@@ -804,6 +851,7 @@ body {
 
   #stats .card h2 {
     font-size: 19px;
+
     margin-top: 5px;
   }
 
@@ -824,6 +872,7 @@ body {
 
   #infoPanel {
     right: 14px;
+
     bottom: 14px;
 
     width: 280px;
@@ -842,6 +891,7 @@ body {
 
   #stagePanel {
     left: 14px;
+
     bottom: 14px;
 
     width: 285px;
@@ -862,6 +912,7 @@ body {
 
   #controls {
     top: 12px;
+
     left: 12px;
   }
 
@@ -886,6 +937,7 @@ body {
 
   #stats {
     top: 12px;
+
     right: 12px;
 
     gap: 5px;
@@ -893,6 +945,7 @@ body {
 
   #stats .card {
     min-width: 69px;
+
     height: 55px;
 
     padding: 8px 9px;
@@ -927,7 +980,9 @@ body {
 
   #infoPanel {
     left: 12px;
+
     right: 12px;
+
     bottom: 12px;
 
     width: auto;
@@ -972,7 +1027,9 @@ body {
 
   #stagePanel {
     left: 7px;
+
     right: 7px;
+
     bottom: 7px;
 
     width: auto;
@@ -996,6 +1053,7 @@ body {
 
   .stageItem {
     padding-left: 25px;
+
     padding-right: 16px;
   }
 
