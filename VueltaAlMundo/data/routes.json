@@ -1,0 +1,12 @@
+[
+  {
+    "day": 1,
+    "name": "Día 1",
+    "date": "2026-09-28",
+    "country": "España",
+    "place": "Bulnes, Asturias",
+    "km": 22.4,
+    "elevation": 3233,
+    "track": "tracks/Día 1.gpx"
+  }
+]
