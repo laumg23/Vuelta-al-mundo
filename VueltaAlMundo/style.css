@@ -219,6 +219,48 @@ body {
 
   box-shadow:
     0 7px 22px rgba(0, 0, 0, 0.07);
+
+  position: relative;
+}
+
+
+/* Punto de ubicación en tiempo real */
+
+#stats .status::before {
+  content: "";
+
+  width: 7px;
+  height: 7px;
+
+  margin-right: 6px;
+
+  background: #159447;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 0 rgba(21, 148, 71, 0.45);
+
+  animation: liveLocation 1.8s infinite;
+}
+
+/* Pulso */
+
+@keyframes liveLocation {
+
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(21, 148, 71, 0.45);
+  }
+
+  60% {
+    box-shadow:
+      0 0 0 7px rgba(21, 148, 71, 0);
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(21, 148, 71, 0);
 }
 
 
