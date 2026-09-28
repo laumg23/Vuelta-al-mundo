@@ -145,7 +145,7 @@ async function render() {
   }
 
 
-  stageCounter.textContent = routes.length;
+ stageCounter.textContent = Object.keys(countries).length;
 
   updateTotals();
 
