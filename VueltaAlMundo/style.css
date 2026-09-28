@@ -113,9 +113,9 @@ body {
 }
 
 
-/* ------------------------------------------
-   TARJETAS
-   ------------------------------------------ */
+/* ==========================================
+   TARJETAS DE ESTADÍSTICAS
+   ========================================== */
 
 #stats .card {
   min-width: 126px;
@@ -124,6 +124,7 @@ body {
   padding: 13px 17px;
 
   background: rgba(255, 255, 255, 0.96);
+
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
@@ -134,37 +135,58 @@ body {
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
+
+
+/* etiqueta superior */
 
 #stats .card span {
   display: block;
 
+  height: 11px;
+
   font-size: 10px;
-  line-height: 1;
+  line-height: 11px;
 
   color: #747b87;
 
   letter-spacing: 1.2px;
+
   font-weight: 500;
 }
+
+
+/* número */
 
 #stats .card h2 {
   margin: 6px 0 0;
 
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+
   font-size: 24px;
-  line-height: 1;
+  line-height: 24px;
 
   font-weight: 700;
+
   letter-spacing: -0.8px;
 
   color: #172033;
 }
 
+
+/* unidad */
+
 #stats .card small {
   margin-top: 4px;
 
+  height: 9px;
+
   font-size: 9px;
+  line-height: 9px;
 
   color: #9aa0a8;
 
@@ -197,10 +219,6 @@ body {
 
   box-shadow:
     0 7px 22px rgba(0, 0, 0, 0.07);
-}
-
-#stats .status::first-letter {
-  color: #1aa05a;
 }
 
 
@@ -277,14 +295,8 @@ body {
   font-weight: 700;
 
   letter-spacing: 1.7px;
+
   text-transform: uppercase;
-}
-
-
-/* pequeño punto */
-
-.locationCard .green::first-letter {
-  color: #159447;
 }
 
 
@@ -304,7 +316,7 @@ body {
 }
 
 
-/* ciudad / lugar */
+/* lugar */
 
 #currentPlace {
   margin: 6px 0 0;
@@ -489,7 +501,7 @@ body {
 
 
 /* ==========================================
-   LISTA
+   LISTA DE ETAPAS
    ========================================== */
 
 #stageList {
@@ -584,7 +596,7 @@ body {
 }
 
 
-/* línea roja */
+/* punto rojo */
 
 .stageItem::before {
   content: "";
@@ -804,7 +816,7 @@ body {
 
 @media (max-width: 650px) {
 
-  /* mapa sigue ocupando todo */
+  /* mapa */
 
   #controls {
     top: 12px;
@@ -881,11 +893,13 @@ body {
 
   .locationCard {
     padding: 17px 18px;
+
     border-radius: 15px;
   }
 
   .locationCard .green {
     font-size: 9px;
+
     letter-spacing: 1.4px;
   }
 
@@ -907,6 +921,7 @@ body {
 
   #fitRoutes {
     height: 50px;
+
     border-radius: 13px;
   }
 
