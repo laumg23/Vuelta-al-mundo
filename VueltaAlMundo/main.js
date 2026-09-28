@@ -3,35 +3,74 @@
 // main.js
 // ==========================================
 
-// ---------- MAPA ----------
+
+// ==========================================
+// MAPA
+// ==========================================
 
 const map = L.map("map").setView([40, 0], 4);
 
+
 L.esri.tiledMapLayer({
-  url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+
+  url:
+    "https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+
 }).addTo(map);
 
 
-// ---------- ELEMENTOS ----------
 
-const stageList = document.getElementById("stageList");
-const stageCounter = document.getElementById("stageCounter");
+// ==========================================
+// ELEMENTOS
+// ==========================================
 
-const kmEl = document.getElementById("km");
-const daysEl = document.getElementById("days");
-const elevationEl = document.getElementById("elevation");
+const stageList =
+  document.getElementById("stageList");
 
-const currentCountry = document.getElementById("currentCountry");
-const currentPlace = document.getElementById("currentPlace");
-const countryCount = document.getElementById("countryCount");
-
-const fitBtn = document.getElementById("fitRoutes");
+const stageCounter =
+  document.getElementById("stageCounter");
 
 
-// ---------- VARIABLES ----------
+const kmEl =
+  document.getElementById("km");
+
+const daysEl =
+  document.getElementById("days");
+
+const elevationEl =
+  document.getElementById("elevation");
+
+
+const currentCountry =
+  document.getElementById("currentCountry");
+
+const currentPlace =
+  document.getElementById("currentPlace");
+
+const countryCount =
+  document.getElementById("countryCount");
+
+
+const fitBtn =
+  document.getElementById("fitRoutes");
+
+
+const stagePanel =
+  document.getElementById("stagePanel");
+
+const stageToggle =
+  document.getElementById("stageToggle");
+
+
+
+// ==========================================
+// VARIABLES
+// ==========================================
 
 let routes = [];
+
 let layers = [];
+
 
 
 // ==========================================
@@ -40,17 +79,72 @@ let layers = [];
 
 init();
 
-fitBtn.addEventListener("click", fitAllRoutes);
 
+fitBtn.addEventListener(
+  "click",
+  fitAllRoutes
+);
+
+
+stageToggle.addEventListener(
+  "click",
+  toggleStagePanel
+);
+
+
+
+// ==========================================
+// CARGAR DATOS
+// ==========================================
 
 async function init() {
 
-  const response = await fetch("data/routes.json");
+  try {
 
-  routes = await response.json();
+    const response =
+      await fetch("data/routes.json");
 
-  render();
+
+    if (!response.ok) {
+
+      throw new Error(
+        "No se pudo cargar routes.json"
+      );
+
+    }
+
+
+    routes =
+      await response.json();
+
+
+    render();
+
+  } catch (error) {
+
+    console.error(
+      "Error cargando las rutas:",
+      error
+    );
+
+  }
+
 }
+
+
+
+// ==========================================
+// ABRIR / CERRAR ETAPAS
+// ==========================================
+
+function toggleStagePanel() {
+
+  stagePanel.classList.toggle(
+    "collapsed"
+  );
+
+}
+
 
 
 // ==========================================
@@ -59,83 +153,158 @@ async function init() {
 
 async function render() {
 
+
   stageList.innerHTML = "";
 
-  layers.forEach(layer => map.removeLayer(layer));
+
+  // Eliminar rutas anteriores
+
+  layers.forEach(layer => {
+
+    map.removeLayer(layer);
+
+  });
+
 
   layers = [];
 
 
-  // AGRUPAR ETAPAS POR PAÍS
+
+  // ==========================================
+  // AGRUPAR DÍAS POR PAÍS
+  // ==========================================
 
   const countries = {};
 
+
   routes.forEach(route => {
 
-    const country = route.country || "País desconocido";
+    const country =
+      route.country || "País desconocido";
+
 
     if (!countries[country]) {
+
       countries[country] = [];
+
     }
+
 
     countries[country].push(route);
 
   });
 
 
-  // MOSTRAR PAÍSES Y SUS ETAPAS
 
-  for (const country of Object.keys(countries)) {
+  // ==========================================
+  // MOSTRAR PAÍSES
+  // ==========================================
 
-    const countryHeader = document.createElement("div");
+  for (
+    const country of Object.keys(countries)
+  ) {
 
-    countryHeader.className = "countryHeader";
+
+    // ------------------------------------------
+    // CABECERA DEL PAÍS
+    // ------------------------------------------
+
+    const countryHeader =
+      document.createElement("div");
+
+
+    countryHeader.className =
+      "countryHeader";
+
 
     countryHeader.innerHTML = `
-      <div class="countryName">${country}</div>
+
+      <div class="countryName">
+        ${country}
+      </div>
 
       <div class="countryStages">
-        ${countries[country].length}
-        ${countries[country].length === 1 ? "ETAPA" : "ETAPAS"}
+
+        1 ETAPA
+
       </div>
+
     `;
 
-    stageList.appendChild(countryHeader);
+
+    stageList.appendChild(
+      countryHeader
+    );
 
 
-    for (const route of countries[country]) {
 
-      const layer = await drawRoute(route);
+    // ------------------------------------------
+    // DÍAS DEL PAÍS
+    // ------------------------------------------
+
+    for (
+      const route of countries[country]
+    ) {
+
+
+      const layer =
+        await drawRoute(route);
+
 
       layers.push(layer);
 
 
-      const item = document.createElement("div");
 
-      item.className = "stageItem";
+      const item =
+        document.createElement("div");
+
+
+      item.className =
+        "stageItem";
+
 
       item.innerHTML = `
-        <div class="stageDay">DÍA ${route.day}</div>
+
+        <div class="stageDay">
+          DÍA ${route.day}
+        </div>
+
 
         <div class="stageTitle">
           ${route.name}
         </div>
 
+
         <div class="stageMeta">
-          ${route.km} km · ${route.elevation} m
+          ${formatNumber(route.km)}
+          km ·
+          ${formatNumber(route.elevation)}
+          m
         </div>
+
       `;
 
 
+
+      // ------------------------------------------
+      // CLICK EN DÍA
+      // ------------------------------------------
+
       item.onclick = () => {
 
-        map.fitBounds(layer.bounds, {
-          padding: [50, 50]
-        });
+
+        map.fitBounds(
+          layer.bounds,
+          {
+            padding: [50, 50]
+          }
+        );
+
 
         layer.popup.openOn(map);
 
       };
+
 
 
       stageList.appendChild(item);
@@ -145,13 +314,36 @@ async function render() {
   }
 
 
- stageCounter.textContent = Object.keys(countries).length;
+
+  // ==========================================
+  // CONTADOR DE ETAPAS
+  // ==========================================
+
+  // IMPORTANTE:
+  // Una etapa = un país.
+  // Un día = un GPX dentro de esa etapa.
+
+  stageCounter.textContent =
+    Object.keys(countries).length;
+
+
+
+  // ==========================================
+  // ESTADÍSTICAS
+  // ==========================================
 
   updateTotals();
+
+
+
+  // ==========================================
+  // INFORMACIÓN ACTUAL
+  // ==========================================
 
   updateInfoPanel();
 
 }
+
 
 
 // ==========================================
@@ -162,121 +354,207 @@ function drawRoute(route) {
 
   return new Promise(resolve => {
 
-    const gpx = new L.GPX(route.track, {
 
-      async: true,
+    const gpx =
+      new L.GPX(
+        route.track,
+        {
 
-      polyline_options: {
-        color: "#D61F26",
-        weight: 4,
-        opacity: 1
-      },
+          async: true,
 
-      marker_options: {
-        startIconUrl: null,
-        endIconUrl: null,
-        shadowUrl: null
+
+          polyline_options: {
+
+            color: "#D61F26",
+
+            weight: 4,
+
+            opacity: 1
+
+          },
+
+
+          marker_options: {
+
+            startIconUrl: null,
+
+            endIconUrl: null,
+
+            shadowUrl: null
+
+          }
+
+        }
+      );
+
+
+
+    // ========================================
+    // GPX CARGADO
+    // ========================================
+
+    gpx.on(
+      "loaded",
+      e => {
+
+
+        // --------------------------------------
+        // FECHA
+        // --------------------------------------
+
+        const fecha =
+          formatDate(route.date);
+
+
+
+        // --------------------------------------
+        // POPUP
+        // --------------------------------------
+
+        const popup =
+          L.popup({
+
+            maxWidth: 340,
+
+            minWidth: 300,
+
+            className: "routePopup"
+
+          }).setContent(`
+
+            <div class="routePopupContent">
+
+
+              <div class="routePopupHeader">
+
+                <div class="routePopupDay">
+
+                  DÍA ${route.day}
+
+                </div>
+
+              </div>
+
+
+
+              <div class="routePopupTitle">
+
+                ${route.name}
+
+              </div>
+
+
+
+              <div class="routePopupDate">
+
+                <span class="routePopupIcon">
+                  ●
+                </span>
+
+                ${fecha}
+
+              </div>
+
+
+
+              <div class="routePopupStats">
+
+
+                <div class="routePopupStat">
+
+                  <div class="routePopupStatValue">
+
+                    ${formatNumber(route.km)}
+
+                  </div>
+
+
+                  <div class="routePopupStatLabel">
+
+                    KM
+
+                  </div>
+
+                </div>
+
+
+
+                <div class="routePopupDivider"></div>
+
+
+
+                <div class="routePopupStat">
+
+                  <div class="routePopupStatValue">
+
+                    ${formatNumber(
+                      route.elevation
+                    )}
+
+                  </div>
+
+
+                  <div class="routePopupStatLabel">
+
+                    DESNIVEL
+
+                  </div>
+
+                </div>
+
+
+              </div>
+
+
+            </div>
+
+          `);
+
+
+
+        // Guardamos el popup
+
+        gpx.popup =
+          popup;
+
+
+
+        // Guardamos los límites
+
+        gpx.bounds =
+          e.target.getBounds();
+
+
+
+        resolve(gpx);
+
       }
-
-    });
-
-
-    gpx.on("loaded", e => {
-
-      // ------------------------------------------
-      // FECHA
-      // ------------------------------------------
-
-      const fecha = formatDate(route.date);
+    );
 
 
-      // ------------------------------------------
-      // POPUP
-      // ------------------------------------------
 
-      const popup = L.popup({
-        maxWidth: 340,
-        minWidth: 300,
-        className: "routePopup"
-      }).setContent(`
+    // ========================================
+    // CLICK DIRECTAMENTE SOBRE LA RUTA
+    // ========================================
 
-        <div class="routePopupContent">
+    gpx.on(
+      "click",
+      ev => {
 
-          <div class="routePopupHeader">
+        gpx.popup
 
-            <div class="routePopupDay">
-              DÍA ${route.day}
-            </div>
+          .setLatLng(
+            ev.latlng
+          )
 
-          </div>
+          .openOn(map);
 
-
-          <div class="routePopupTitle">
-            ${route.name}
-          </div>
+      }
+    );
 
 
-          <div class="routePopupDate">
-            <span class="routePopupIcon">●</span>
-            ${fecha}
-          </div>
 
-
-          <div class="routePopupStats">
-
-            <div class="routePopupStat">
-
-              <div class="routePopupStatValue">
-                ${formatNumber(route.km)}
-              </div>
-
-              <div class="routePopupStatLabel">
-                KM
-              </div>
-
-            </div>
-
-
-            <div class="routePopupDivider"></div>
-
-
-            <div class="routePopupStat">
-
-              <div class="routePopupStatValue">
-                ${formatNumber(route.elevation)}
-              </div>
-
-              <div class="routePopupStatLabel">
-                DESNIVEL
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      `);
-
-
-      gpx.popup = popup;
-
-      gpx.bounds = e.target.getBounds();
-
-
-      resolve(gpx);
-
-    });
-
-
-    gpx.on("click", ev => {
-
-      gpx.popup
-        .setLatLng(ev.latlng)
-        .openOn(map);
-
-    });
-
+    // Añadir al mapa
 
     gpx.addTo(map);
 
@@ -285,60 +563,111 @@ function drawRoute(route) {
 }
 
 
+
 // ==========================================
 // FORMATEAR FECHA
 // ==========================================
 
 function formatDate(value) {
 
+
   if (!value) {
+
     return "Fecha no disponible";
-  }
-
-
-  // Si ya es una fecha válida en formato ISO
-
-  let date = new Date(value);
-
-
-  if (!isNaN(date.getTime())) {
-
-    return date.toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
 
   }
 
 
+
   // ------------------------------------------
-  // FORMATO DD/MM/YYYY
+  // Intentar fecha normal
   // ------------------------------------------
 
-  if (typeof value === "string") {
+  let date =
+    new Date(value);
 
-    const match = value.match(
-      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
+
+  if (
+    !isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return date.toLocaleDateString(
+      "es-ES",
+      {
+
+        day: "numeric",
+
+        month: "long",
+
+        year: "numeric"
+
+      }
     );
+
+  }
+
+
+
+  // ------------------------------------------
+  // DD/MM/YYYY
+  // ------------------------------------------
+
+  if (
+    typeof value === "string"
+  ) {
+
+
+    const match =
+      value.match(
+        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
+      );
+
 
 
     if (match) {
 
-      const day = Number(match[1]);
-      const month = Number(match[2]) - 1;
-      const year = Number(match[3]);
 
-      date = new Date(year, month, day);
+      const day =
+        Number(match[1]);
 
 
-      if (!isNaN(date.getTime())) {
+      const month =
+        Number(match[2]) - 1;
 
-        return date.toLocaleDateString("es-ES", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
+
+      const year =
+        Number(match[3]);
+
+
+      date =
+        new Date(
+          year,
+          month,
+          day
+        );
+
+
+
+      if (
+        !isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return date.toLocaleDateString(
+          "es-ES",
+          {
+
+            day: "numeric",
+
+            month: "long",
+
+            year: "numeric"
+
+          }
+        );
 
       }
 
@@ -347,9 +676,11 @@ function formatDate(value) {
   }
 
 
+
   return "Fecha no disponible";
 
 }
+
 
 
 // ==========================================
@@ -358,19 +689,32 @@ function formatDate(value) {
 
 function formatNumber(value) {
 
-  const number = Number(value);
+
+  const number =
+    Number(value);
 
 
-  if (isNaN(number)) {
+  if (
+    isNaN(number)
+  ) {
+
     return "—";
+
   }
 
 
-  return number.toLocaleString("es-ES", {
-    maximumFractionDigits: 2
-  });
+
+  return number.toLocaleString(
+    "es-ES",
+    {
+
+      maximumFractionDigits: 2
+
+    }
+  );
 
 }
+
 
 
 // ==========================================
@@ -379,25 +723,52 @@ function formatNumber(value) {
 
 function updateTotals() {
 
-  const totalKm = routes.reduce(
-    (sum, r) => sum + Number(r.km),
-    0
-  );
+
+  const totalKm =
+    routes.reduce(
+
+      (sum, r) =>
+        sum + Number(r.km),
+
+      0
+
+    );
 
 
-  const totalElevation = routes.reduce(
-    (sum, r) => sum + Number(r.elevation),
-    0
-  );
+
+  const totalElevation =
+    routes.reduce(
+
+      (sum, r) =>
+        sum + Number(r.elevation),
+
+      0
+
+    );
 
 
-  kmEl.textContent = totalKm.toFixed(1);
 
-  daysEl.textContent = routes.length;
+  // KM
 
-  elevationEl.textContent = `${Math.round(totalElevation)} m`;
+  kmEl.textContent =
+    totalKm.toFixed(1);
+
+
+
+  // DÍAS
+
+  daysEl.textContent =
+    routes.length;
+
+
+
+  // DESNIVEL
+
+  elevationEl.textContent =
+    `${Math.round(totalElevation)} m`;
 
 }
+
 
 
 // ==========================================
@@ -406,25 +777,53 @@ function updateTotals() {
 
 function updateInfoPanel() {
 
-  if (!routes.length) return;
+
+  if (!routes.length) {
+
+    return;
+
+  }
 
 
-  const last = routes[routes.length - 1];
+
+  // Último GPX
+
+  const last =
+    routes[routes.length - 1];
 
 
-  currentCountry.textContent = last.country;
 
-  currentPlace.textContent = last.place;
+  // País
 
+  currentCountry.textContent =
+    last.country;
+
+
+
+  // Lugar
+
+  currentPlace.textContent =
+    last.place;
+
+
+
+  // Países visitados
 
   const countries = [
-    ...new Set(routes.map(r => r.country))
+    ...new Set(
+      routes.map(
+        r => r.country
+      )
+    )
   ];
 
 
-  countryCount.textContent = countries.length;
+
+  countryCount.textContent =
+    countries.length;
 
 }
+
 
 
 // ==========================================
@@ -433,14 +832,29 @@ function updateInfoPanel() {
 
 function fitAllRoutes() {
 
-  if (!layers.length) return;
+
+  if (!layers.length) {
+
+    return;
+
+  }
 
 
-  const group = L.featureGroup(layers);
+
+  const group =
+    L.featureGroup(
+      layers
+    );
 
 
-  map.fitBounds(group.getBounds(), {
-    padding: [60, 60]
-  });
+
+  map.fitBounds(
+    group.getBounds(),
+    {
+
+      padding: [60, 60]
+
+    }
+  );
 
 }
