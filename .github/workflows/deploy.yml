@@ -36,7 +36,7 @@ jobs:
           python-version: "3.13"
 
       - name: Generar datos de las rutas
-        run: python scripts/build_routes.py
+        run: python VueltaAlMundo/scripts/build_routes.py
 
       - name: Preparar GitHub Pages
         uses: actions/configure-pages@v5
@@ -44,7 +44,7 @@ jobs:
       - name: Subir archivos de la web
         uses: actions/upload-pages-artifact@v4
         with:
-          path: "."
+          path: "VueltaAlMundo"
 
       - name: Publicar en GitHub Pages
         id: deployment
