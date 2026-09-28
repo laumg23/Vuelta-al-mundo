@@ -1311,3 +1311,37 @@ body {
   }
 
 }
+/* ==========================================
+   PANEL ETAPAS — ABRIR / CERRAR
+   ========================================== */
+
+#stagePanel {
+  transition:
+    max-height 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+#stagePanel.collapsed {
+  max-height: 61px;
+}
+
+
+#stagePanel.collapsed #stageList {
+  display: none;
+}
+
+
+#stageToggle {
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    background 0.2s ease;
+}
+
+
+#stageToggle:hover {
+  background: #fafafa;
+}
