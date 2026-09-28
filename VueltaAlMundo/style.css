@@ -1058,3 +1058,256 @@ body {
   }
 
 }
+/* ==========================================
+   POPUP DE ETAPA — NUEVO DISEÑO
+   ========================================== */
+
+.routePopup .leaflet-popup-content-wrapper {
+  padding: 0;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.98);
+
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.16);
+}
+
+
+.routePopup .leaflet-popup-content {
+  width: 300px !important;
+
+  margin: 0;
+
+  font-family: "Inter", Arial, sans-serif;
+}
+
+
+.routePopup .leaflet-popup-tip {
+  background: #ffffff;
+
+  box-shadow: none;
+}
+
+
+/* ==========================================
+   CONTENIDO
+   ========================================== */
+
+.routePopupContent {
+  padding: 21px 22px 20px;
+}
+
+
+/* ==========================================
+   CABECERA
+   ========================================== */
+
+.routePopupHeader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+
+.routePopupDay {
+  color: #d61f26;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+
+  text-transform: uppercase;
+}
+
+
+/* ==========================================
+   TÍTULO
+   ========================================== */
+
+.routePopupTitle {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 24px;
+
+  line-height: 1.1;
+
+  font-weight: 700;
+
+  letter-spacing: -0.8px;
+}
+
+
+/* ==========================================
+   FECHA
+   ========================================== */
+
+.routePopupDate {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 10px;
+
+  color: #858b94;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  text-transform: capitalize;
+}
+
+
+.routePopupIcon {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 7px;
+
+  height: 7px;
+
+  color: #d61f26;
+
+  font-size: 7px;
+}
+
+
+/* ==========================================
+   ESTADÍSTICAS
+   ========================================== */
+
+.routePopupStats {
+  display: grid;
+
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
+
+  margin-top: 19px;
+
+  padding-top: 17px;
+
+  border-top: 1px solid #eceef1;
+}
+
+
+.routePopupStat {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+.routePopupStatValue {
+  color: #172033;
+
+  font-size: 21px;
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: -0.6px;
+}
+
+
+.routePopupStatLabel {
+  margin-top: 6px;
+
+  color: #9a9fa7;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
+}
+
+
+.routePopupDivider {
+  width: 1px;
+
+  height: 34px;
+
+  background: #e7e9ec;
+}
+
+
+/* ==========================================
+   BOTÓN CERRAR
+   ========================================== */
+
+.routePopup .leaflet-popup-close-button {
+  top: 11px !important;
+
+  right: 12px !important;
+
+  width: 28px !important;
+
+  height: 28px !important;
+
+  color: #777e87 !important;
+
+  font-size: 22px !important;
+
+  font-weight: 300 !important;
+
+  line-height: 28px !important;
+
+  text-align: center;
+
+  border-radius: 50%;
+}
+
+
+.routePopup .leaflet-popup-close-button:hover {
+  color: #172033 !important;
+
+  background: #f3f4f5;
+}
+
+
+/* ==========================================
+   MÓVIL
+   ========================================== */
+
+@media (max-width: 650px) {
+
+  .routePopup .leaflet-popup-content {
+    width: 260px !important;
+  }
+
+
+  .routePopupContent {
+    padding: 18px 18px 17px;
+  }
+
+
+  .routePopupTitle {
+    font-size: 21px;
+  }
+
+
+  .routePopupStatValue {
+    font-size: 18px;
+  }
+
+}
