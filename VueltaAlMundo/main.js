@@ -31,11 +31,13 @@ let layers = [];
 // ==========================================
 // INICIO
 // ==========================================
+
 init();
 
 fitBtn.addEventListener("click", fitAllRoutes);
 
 async function init() {
+
   const response = await fetch("data/routes.json");
   routes = await response.json();
 
@@ -45,6 +47,7 @@ async function init() {
 // ==========================================
 // RENDER GENERAL
 // ==========================================
+
 async function render() {
 
   stageList.innerHTML = "";
@@ -52,31 +55,75 @@ async function render() {
   layers.forEach(layer => map.removeLayer(layer));
   layers = [];
 
-  for (const route of routes) {
+  // ----------------------------------------
+  // AGRUPAR ETAPAS POR PAÍS
+  // ----------------------------------------
 
-    const layer = await drawRoute(route);
-    layers.push(layer);
+  const countries = {};
 
-    const item = document.createElement("div");
-    item.className = "stageItem";
+  routes.forEach(route => {
 
-    item.innerHTML = `
-      <div class="stageDay">DÍA ${route.day}</div>
-      <div class="stageTitle">${route.name}</div>
-      <div class="stageMeta">${route.km} km · ${route.elevation} m</div>
+    const country = route.country || "País desconocido";
+
+    if (!countries[country]) {
+      countries[country] = [];
+    }
+
+    countries[country].push(route);
+
+  });
+
+  // ----------------------------------------
+  // MOSTRAR PAÍSES Y SUS ETAPAS
+  // ----------------------------------------
+
+  for (const country of Object.keys(countries)) {
+
+    // CABECERA DEL PAÍS
+    const countryHeader = document.createElement("div");
+
+    countryHeader.className = "countryHeader";
+
+    countryHeader.innerHTML = `
+      <div class="countryName">${country}</div>
+      <div class="countryStages">
+        ${countries[country].length}
+        ${countries[country].length === 1 ? "ETAPA" : "ETAPAS"}
+      </div>
     `;
 
-    item.onclick = () => {
+    stageList.appendChild(countryHeader);
 
-      map.fitBounds(layer.bounds, {
-        padding: [50, 50]
-      });
+    // ETAPAS DEL PAÍS
+    for (const route of countries[country]) {
 
-      layer.popup.openOn(map);
+      const layer = await drawRoute(route);
 
-    };
+      layers.push(layer);
 
-    stageList.appendChild(item);
+      const item = document.createElement("div");
+
+      item.className = "stageItem";
+
+      item.innerHTML = `
+        <div class="stageDay">DÍA ${route.day}</div>
+        <div class="stageTitle">${route.name}</div>
+        <div class="stageMeta">${route.km} km · ${route.elevation} m</div>
+      `;
+
+      item.onclick = () => {
+
+        map.fitBounds(layer.bounds, {
+          padding: [50, 50]
+        });
+
+        layer.popup.openOn(map);
+
+      };
+
+      stageList.appendChild(item);
+
+    }
 
   }
 
@@ -90,6 +137,7 @@ async function render() {
 // ==========================================
 // DIBUJAR RUTA GPX
 // ==========================================
+
 function drawRoute(route) {
 
   return new Promise(resolve => {
@@ -121,6 +169,7 @@ function drawRoute(route) {
 
       const popup = L.popup().setContent(`
         <div style="min-width:180px;font-family:Arial">
+
           <div style="font-size:11px;color:#888">
             DÍA ${route.day}
           </div>
@@ -136,6 +185,7 @@ function drawRoute(route) {
           <div style="margin-top:8px;font-weight:600">
             ${route.km} km · ${route.elevation} m ↑
           </div>
+
         </div>
       `);
 
@@ -147,7 +197,11 @@ function drawRoute(route) {
     });
 
     gpx.on("click", ev => {
-      gpx.popup.setLatLng(ev.latlng).openOn(map);
+
+      gpx.popup
+        .setLatLng(ev.latlng)
+        .openOn(map);
+
     });
 
     gpx.addTo(map);
@@ -159,9 +213,13 @@ function drawRoute(route) {
 // ==========================================
 // ESTADÍSTICAS
 // ==========================================
+
 function updateTotals() {
 
-  const totalKm = routes.reduce((sum, r) => sum + Number(r.km), 0);
+  const totalKm = routes.reduce(
+    (sum, r) => sum + Number(r.km),
+    0
+  );
 
   const totalElevation = routes.reduce(
     (sum, r) => sum + Number(r.elevation),
@@ -169,7 +227,9 @@ function updateTotals() {
   );
 
   kmEl.textContent = totalKm.toFixed(1);
+
   daysEl.textContent = routes.length;
+
   elevationEl.textContent = `${totalElevation} m`;
 
 }
@@ -177,6 +237,7 @@ function updateTotals() {
 // ==========================================
 // PANEL DERECHO
 // ==========================================
+
 function updateInfoPanel() {
 
   if (!routes.length) return;
@@ -186,7 +247,10 @@ function updateInfoPanel() {
   currentCountry.textContent = last.country;
   currentPlace.textContent = last.place;
 
-  const countries = [...new Set(routes.map(r => r.country))];
+  const countries = [
+    ...new Set(routes.map(r => r.country))
+  ];
+
   countryCount.textContent = countries.length;
 
 }
@@ -194,6 +258,7 @@ function updateInfoPanel() {
 // ==========================================
 // VER MAPA COMPLETO
 // ==========================================
+
 function fitAllRoutes() {
 
   if (!layers.length) return;
