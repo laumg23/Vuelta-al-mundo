@@ -1,99 +1,242 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>De Alicante a Nordkapp</title>
 
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-  <!-- Tu CSS -->
-  <link rel="stylesheet" href="style.css">
+  <!-- LEAFLET -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+
+  <!-- ESTILOS PROPIOS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
 </head>
+
 
 <body>
 
-  <!-- HERO -->
-  < id="controls">
+
+  <!-- ==========================================
+       TÍTULO
+       ========================================== -->
+
+  <div id="controls">
 
     <div id="hero">
-      <h1>De Alicante a Nordkapp</h1>
-      <p>La vuelta a Europa en bicicleta</p>
+
+      <h1>
+        De Alicante a Nordkapp
+      </h1>
+
+      <p>
+        La vuelta a Europa en bicicleta
+      </p>
+
     </div>
 
   </div>
 
-  <!-- ESTADÍSTICAS -->
+
+
+  <!-- ==========================================
+       ESTADÍSTICAS
+       ========================================== -->
+
   <div id="stats">
 
-    <div class="card">
-      <span>RECORRIDO</span>
-      <h2 id="km">0</h2>
-      <small>KM</small>
-    </div>
 
     <div class="card">
-      <span>ETAPAS</span>
-      <h2 id="days">0</h2>
-      <small>DÍAS</small>
+
+      <span>
+        RECORRIDO
+      </span>
+
+      <h2 id="km">
+        0
+      </h2>
+
+      <small>
+        KM
+      </small>
+
     </div>
 
+
+
     <div class="card">
-      <span>DESNIVEL</span>
-      <h2 id="elevation">0 m</h2>
+
+      <span>
+        DÍAS
+      </span>
+
+      <h2 id="days">
+        0
+      </h2>
+
+      <small>
+        DÍAS
+      </small>
+
     </div>
+
+
+
+    <div class="card">
+
+      <span>
+        DESNIVEL
+      </span>
+
+      <h2 id="elevation">
+        0 m
+      </h2>
+
+    </div>
+
+
 
     <div class="status">
       EN RUTA
     </div>
 
+
   </div>
 
-  <!-- PANEL DERECHO -->
+
+
+  <!-- ==========================================
+       INFORMACIÓN ACTUAL
+       ========================================== -->
+
   <div id="infoPanel">
 
+
     <div class="locationCard">
-      <span class="green">● POSICIÓN ACTUAL</span>
-      <h2 id="currentCountry">—</h2>
-      <p id="currentPlace">Sin datos</p>
+
+      <span class="green">
+        ● POSICIÓN ACTUAL
+      </span>
+
+      <h2 id="currentCountry">
+        —
+      </h2>
+
+      <p id="currentPlace">
+        Sin datos
+      </p>
+
     </div>
 
+
+
     <div class="countriesCard">
+
       <div class="row">
-        <span>Países visitados</span>
-        <strong id="countryCount">0</strong>
+
+        <span>
+          Países visitados
+        </span>
+
+        <strong id="countryCount">
+          0
+        </strong>
+
       </div>
+
     </div>
+
+
 
     <button id="fitRoutes">
       VER MAPA COMPLETO
     </button>
 
+
   </div>
 
-  <!-- MAPA -->
-  <div id="map"></div>
 
-  <!-- PANEL DE ETAPAS -->
-  <div id="stagePanel" class="collapsed">
 
-  <div class="panelHeader" id="stageToggle">
-      <h3>ETAPAS</h3>
-      <span id="stageCounter">0</span>
-  </div>
+  <!-- ==========================================
+       PANEL DE ETAPAS
+       ========================================== -->
+
+  <div
+    id="stagePanel"
+    class="collapsed"
+  >
+
+
+    <div
+      class="panelHeader"
+      id="stageToggle"
+    >
+
+      <h3>
+        ETAPAS
+      </h3>
+
+      <span id="stageCounter">
+        0
+      </span>
+
+    </div>
+
 
     <div id="stageList"></div>
 
+
   </div>
 
-  <!-- LIBRERÍAS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/esri-leaflet"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
 
-  <!-- JS -->
+
+  <!-- ==========================================
+       MAPA
+       ========================================== -->
+
+  <div id="map"></div>
+
+
+
+  <!-- ==========================================
+       SCRIPTS
+       ========================================== -->
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+
+  <script
+    src="https://unpkg.com/esri-leaflet"
+  ></script>
+
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"
+  ></script>
+
+
   <script src="main.js"></script>
 
+
 </body>
+
 </html>
