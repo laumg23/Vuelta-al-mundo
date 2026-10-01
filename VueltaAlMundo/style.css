@@ -1482,3 +1482,87 @@ body {
 #stageToggle:hover {
   background: #fafafa;
 }
+/* ==========================================
+   AJUSTE MÓVIL — PARTE SUPERIOR
+   ========================================== */
+
+@media (max-width: 650px) {
+
+  /* TÍTULO */
+
+  #controls {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+
+  #hero {
+    width: 190px;
+    max-width: 190px;
+    padding: 12px 14px;
+  }
+
+  #hero h1 {
+    font-size: 17px;
+    line-height: 1.08;
+  }
+
+
+  /* ESTADÍSTICAS */
+
+  #stats {
+    top: 78px;
+    left: 10px;
+    right: 10px;
+
+    width: auto;
+
+    transform: none;
+
+    display: flex;
+    gap: 5px;
+
+    justify-content: stretch;
+  }
+
+  #stats .card {
+    min-width: 0;
+    flex: 1;
+
+    height: 55px;
+
+    padding: 8px 8px;
+
+    border-radius: 12px;
+  }
+
+  #stats .card span {
+    font-size: 7px;
+    letter-spacing: 0.7px;
+  }
+
+  #stats .card h2 {
+    font-size: 16px;
+    margin-top: 5px;
+    white-space: nowrap;
+  }
+
+
+  /* EN RUTA */
+
+  #stats .status {
+    flex: 0 0 auto;
+
+    height: 55px;
+
+    padding: 0 10px;
+
+    border-radius: 12px;
+
+    font-size: 9px;
+
+    white-space: nowrap;
+  }
+
+}
