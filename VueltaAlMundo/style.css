@@ -413,7 +413,12 @@ body {
 
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.07);
+
+  overflow: hidden;
 }
+
+
+/* fila que abre / cierra */
 
 .countriesCard .row {
   min-height: 58px;
@@ -429,7 +434,21 @@ body {
   font-size: 14px;
 
   color: #6f7580;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    background 0.2s ease;
 }
+
+.countriesCard .row:hover {
+  background: #fafafa;
+}
+
+
+/* número de países */
 
 .countriesCard strong {
   min-width: 30px;
@@ -451,6 +470,122 @@ body {
   font-size: 13px;
 
   color: #172033;
+
+  transition:
+    background 0.2s ease;
+}
+
+
+/* ==========================================
+   LISTA DE PAÍSES
+   ========================================== */
+
+.countryList {
+  max-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  border-top: 0 solid #eceef1;
+
+  transition:
+    max-height 0.25s ease,
+    opacity 0.2s ease,
+    border-top-width 0.25s ease;
+}
+
+
+/* cuando está abierto */
+
+.countriesCard.expanded .countryList {
+  max-height: 300px;
+
+  opacity: 1;
+
+  border-top-width: 1px;
+
+  overflow-y: auto;
+}
+
+
+/* cada país */
+
+.countryListItem {
+  min-height: 43px;
+
+  padding: 0 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border-bottom: 1px solid #f1f2f4;
+
+  color: #172033;
+
+  font-size: 13px;
+}
+
+.countryListItem:last-child {
+  border-bottom: none;
+}
+
+
+/* número del país */
+
+.countryListNumber {
+  width: 22px;
+
+  height: 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  background: #f2f3f5;
+
+  border-radius: 50%;
+
+  color: #858b94;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+
+/* nombre */
+
+.countryListName {
+  font-size: 13px;
+
+  font-weight: 500;
+
+  color: #172033;
+}
+
+
+/* scrollbar de la lista */
+
+.countryList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.countryList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.countryList::-webkit-scrollbar-thumb {
+  background: #c9ccd1;
+
+  border-radius: 20px;
 }
 
 
@@ -1058,6 +1193,8 @@ body {
   }
 
 }
+
+
 /* ==========================================
    POPUP DE ETAPA — NUEVO DISEÑO
    ========================================== */
@@ -1311,6 +1448,8 @@ body {
   }
 
 }
+
+
 /* ==========================================
    PANEL ETAPAS — ABRIR / CERRAR
    ========================================== */
