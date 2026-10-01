@@ -51,6 +51,21 @@ const countryCount =
   document.getElementById("countryCount");
 
 
+// ==========================================
+// PAÍSES VISITADOS
+// ==========================================
+
+const countriesCard =
+  document.getElementById("countriesCard");
+
+const countriesToggle =
+  document.getElementById("countriesToggle");
+
+const countryList =
+  document.getElementById("countryList");
+
+
+
 const fitBtn =
   document.getElementById("fitRoutes");
 
@@ -89,6 +104,14 @@ fitBtn.addEventListener(
 stageToggle.addEventListener(
   "click",
   toggleStagePanel
+);
+
+
+// Abrir / cerrar países
+
+countriesToggle.addEventListener(
+  "click",
+  toggleCountries
 );
 
 
@@ -141,6 +164,20 @@ function toggleStagePanel() {
 
   stagePanel.classList.toggle(
     "collapsed"
+  );
+
+}
+
+
+
+// ==========================================
+// ABRIR / CERRAR PAÍSES
+// ==========================================
+
+function toggleCountries() {
+
+  countriesCard.classList.toggle(
+    "expanded"
   );
 
 }
@@ -319,7 +356,6 @@ async function render() {
   // CONTADOR DE ETAPAS
   // ==========================================
 
-  // IMPORTANTE:
   // Una etapa = un país.
   // Un día = un GPX dentro de esa etapa.
 
@@ -341,6 +377,82 @@ async function render() {
   // ==========================================
 
   updateInfoPanel();
+
+
+
+  // ==========================================
+  // LISTA DE PAÍSES
+  // ==========================================
+
+  updateCountriesList();
+
+}
+
+
+
+// ==========================================
+// ACTUALIZAR LISTA DE PAÍSES
+// ==========================================
+
+function updateCountriesList() {
+
+
+  const countries = [
+    ...new Set(
+
+      routes
+        .map(route => route.country)
+        .filter(Boolean)
+
+    )
+  ];
+
+
+
+  // Número de países
+
+  countryCount.textContent =
+    countries.length;
+
+
+
+  // Vaciar lista
+
+  countryList.innerHTML = "";
+
+
+
+  // Crear cada país
+
+  countries.forEach(
+    (country, index) => {
+
+
+      const item =
+        document.createElement("div");
+
+
+      item.className =
+        "countryListItem";
+
+
+      item.innerHTML = `
+
+        <span class="countryListNumber">
+          ${index + 1}
+        </span>
+
+        <span class="countryListName">
+          ${country}
+        </span>
+
+      `;
+
+
+      countryList.appendChild(item);
+
+    }
+  );
 
 }
 
@@ -571,7 +683,11 @@ function drawRoute(route) {
 function formatDate(value) {
 
 
-  if (!value) {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
 
     return "Fecha no disponible";
 
@@ -579,12 +695,114 @@ function formatDate(value) {
 
 
 
+  // Convertimos a texto
+
+  const text =
+    String(value).trim();
+
+
+
   // ------------------------------------------
-  // Intentar fecha normal
+  // DD/MM/YYYY
+  // DD-MM-YYYY
   // ------------------------------------------
 
-  let date =
-    new Date(value);
+  let match =
+    text.match(
+      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
+    );
+
+
+  if (match) {
+
+
+    const day =
+      Number(match[1]);
+
+
+    const month =
+      Number(match[2]);
+
+
+    const year =
+      Number(match[3]);
+
+
+    const date =
+      new Date(
+        year,
+        month - 1,
+        day
+      );
+
+
+    if (
+      !isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return formatDateObject(date);
+
+    }
+
+  }
+
+
+
+  // ------------------------------------------
+  // YYYY-MM-DD
+  // ------------------------------------------
+
+  match =
+    text.match(
+      /^(\d{4})-(\d{1,2})-(\d{1,2})$/
+    );
+
+
+  if (match) {
+
+
+    const year =
+      Number(match[1]);
+
+
+    const month =
+      Number(match[2]);
+
+
+    const day =
+      Number(match[3]);
+
+
+    const date =
+      new Date(
+        year,
+        month - 1,
+        day
+      );
+
+
+    if (
+      !isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return formatDateObject(date);
+
+    }
+
+  }
+
+
+
+  // ------------------------------------------
+  // ISO con hora
+  // ------------------------------------------
+
+  const date =
+    new Date(text);
 
 
   if (
@@ -593,91 +811,40 @@ function formatDate(value) {
     )
   ) {
 
-    return date.toLocaleDateString(
-      "es-ES",
-      {
-
-        day: "numeric",
-
-        month: "long",
-
-        year: "numeric"
-
-      }
-    );
+    return formatDateObject(date);
 
   }
 
 
 
   // ------------------------------------------
-  // DD/MM/YYYY
+  // Si no se puede interpretar
   // ------------------------------------------
-
-  if (
-    typeof value === "string"
-  ) {
-
-
-    const match =
-      value.match(
-        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
-      );
-
-
-
-    if (match) {
-
-
-      const day =
-        Number(match[1]);
-
-
-      const month =
-        Number(match[2]) - 1;
-
-
-      const year =
-        Number(match[3]);
-
-
-      date =
-        new Date(
-          year,
-          month,
-          day
-        );
-
-
-
-      if (
-        !isNaN(
-          date.getTime()
-        )
-      ) {
-
-        return date.toLocaleDateString(
-          "es-ES",
-          {
-
-            day: "numeric",
-
-            month: "long",
-
-            year: "numeric"
-
-          }
-        );
-
-      }
-
-    }
-
-  }
-
-
 
   return "Fecha no disponible";
+
+}
+
+
+
+// ==========================================
+// FORMATEAR OBJETO DATE
+// ==========================================
+
+function formatDateObject(date) {
+
+  return date.toLocaleDateString(
+    "es-ES",
+    {
+
+      day: "numeric",
+
+      month: "long",
+
+      year: "numeric"
+
+    }
+  );
 
 }
 
@@ -804,23 +971,6 @@ function updateInfoPanel() {
 
   currentPlace.textContent =
     last.place;
-
-
-
-  // Países visitados
-
-  const countries = [
-    ...new Set(
-      routes.map(
-        r => r.country
-      )
-    )
-  ];
-
-
-
-  countryCount.textContent =
-    countries.length;
 
 }
 
