@@ -50,11 +50,6 @@ const currentPlace =
 const countryCount =
   document.getElementById("countryCount");
 
-
-// ==========================================
-// PAÍSES VISITADOS
-// ==========================================
-
 const countriesCard =
   document.getElementById("countriesCard");
 
@@ -63,7 +58,6 @@ const countriesToggle =
 
 const countryList =
   document.getElementById("countryList");
-
 
 
 const fitBtn =
@@ -106,8 +100,6 @@ stageToggle.addEventListener(
   toggleStagePanel
 );
 
-
-// Abrir / cerrar países
 
 countriesToggle.addEventListener(
   "click",
@@ -356,6 +348,7 @@ async function render() {
   // CONTADOR DE ETAPAS
   // ==========================================
 
+  // IMPORTANTE:
   // Una etapa = un país.
   // Un día = un GPX dentro de esa etapa.
 
@@ -378,81 +371,7 @@ async function render() {
 
   updateInfoPanel();
 
-
-
-  // ==========================================
-  // LISTA DE PAÍSES
-  // ==========================================
-
   updateCountriesList();
-
-}
-
-
-
-// ==========================================
-// ACTUALIZAR LISTA DE PAÍSES
-// ==========================================
-
-function updateCountriesList() {
-
-
-  const countries = [
-    ...new Set(
-
-      routes
-        .map(route => route.country)
-        .filter(Boolean)
-
-    )
-  ];
-
-
-
-  // Número de países
-
-  countryCount.textContent =
-    countries.length;
-
-
-
-  // Vaciar lista
-
-  countryList.innerHTML = "";
-
-
-
-  // Crear cada país
-
-  countries.forEach(
-    (country, index) => {
-
-
-      const item =
-        document.createElement("div");
-
-
-      item.className =
-        "countryListItem";
-
-
-      item.innerHTML = `
-
-        <span class="countryListNumber">
-          ${index + 1}
-        </span>
-
-        <span class="countryListName">
-          ${country}
-        </span>
-
-      `;
-
-
-      countryList.appendChild(item);
-
-    }
-  );
 
 }
 
@@ -511,11 +430,18 @@ function drawRoute(route) {
 
 
         // --------------------------------------
-        // FECHA
+        // FECHA REAL DEL GPX
         // --------------------------------------
 
+        // La fecha se obtiene directamente del
+        // primer punto grabado en el GPX.
+        // Así no dependemos de route.date en routes.json.
+
+        const gpxStartTime =
+          e.target.get_start_time();
+
         const fecha =
-          formatDate(route.date);
+          formatDate(gpxStartTime);
 
 
 
@@ -683,168 +609,96 @@ function drawRoute(route) {
 function formatDate(value) {
 
 
-  if (
-    value === null ||
-    value === undefined ||
-    value === ""
-  ) {
+  if (!value) {
 
     return "Fecha no disponible";
 
   }
 
 
+  // ------------------------------------------
+  // FECHA DEVUELTA POR EL GPX
+  // ------------------------------------------
 
-  // Convertimos a texto
+  if (value instanceof Date) {
 
-  const text =
-    String(value).trim();
+    if (!isNaN(value.getTime())) {
 
+      return value.toLocaleDateString(
+        "es-ES",
+        {
+
+          day: "numeric",
+
+          month: "long",
+
+          year: "numeric"
+
+        }
+      );
+
+    }
+
+    return "Fecha no disponible";
+
+  }
 
 
   // ------------------------------------------
-  // DD/MM/YYYY
-  // DD-MM-YYYY
+  // TEXTO DD/MM/YYYY o DD-MM-YYYY
   // ------------------------------------------
 
-  let match =
-    text.match(
-      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
-    );
+  if (typeof value === "string") {
 
+    const text = value.trim();
 
-  if (match) {
-
-
-    const day =
-      Number(match[1]);
-
-
-    const month =
-      Number(match[2]);
-
-
-    const year =
-      Number(match[3]);
-
-
-    const date =
-      new Date(
-        year,
-        month - 1,
-        day
+    const match =
+      text.match(
+        /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
       );
 
 
-    if (
-      !isNaN(
-        date.getTime()
-      )
-    ) {
+    if (match) {
 
-      return formatDateObject(date);
+      const day =
+        Number(match[1]);
+
+      const month =
+        Number(match[2]) - 1;
+
+      const year =
+        Number(match[3]);
+
+      const date =
+        new Date(
+          year,
+          month,
+          day
+        );
+
+      if (!isNaN(date.getTime())) {
+
+        return date.toLocaleDateString(
+          "es-ES",
+          {
+
+            day: "numeric",
+
+            month: "long",
+
+            year: "numeric"
+
+          }
+        );
+
+      }
 
     }
 
   }
 
-
-
-  // ------------------------------------------
-  // YYYY-MM-DD
-  // ------------------------------------------
-
-  match =
-    text.match(
-      /^(\d{4})-(\d{1,2})-(\d{1,2})$/
-    );
-
-
-  if (match) {
-
-
-    const year =
-      Number(match[1]);
-
-
-    const month =
-      Number(match[2]);
-
-
-    const day =
-      Number(match[3]);
-
-
-    const date =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
-
-
-    if (
-      !isNaN(
-        date.getTime()
-      )
-    ) {
-
-      return formatDateObject(date);
-
-    }
-
-  }
-
-
-
-  // ------------------------------------------
-  // ISO con hora
-  // ------------------------------------------
-
-  const date =
-    new Date(text);
-
-
-  if (
-    !isNaN(
-      date.getTime()
-    )
-  ) {
-
-    return formatDateObject(date);
-
-  }
-
-
-
-  // ------------------------------------------
-  // Si no se puede interpretar
-  // ------------------------------------------
 
   return "Fecha no disponible";
-
-}
-
-
-
-// ==========================================
-// FORMATEAR OBJETO DATE
-// ==========================================
-
-function formatDateObject(date) {
-
-  return date.toLocaleDateString(
-    "es-ES",
-    {
-
-      day: "numeric",
-
-      month: "long",
-
-      year: "numeric"
-
-    }
-  );
 
 }
 
@@ -971,6 +825,75 @@ function updateInfoPanel() {
 
   currentPlace.textContent =
     last.place;
+
+
+
+  // Países visitados
+
+  const countries = [
+    ...new Set(
+      routes.map(
+        r => r.country
+      )
+    )
+  ];
+
+
+
+  countryCount.textContent =
+    countries.length;
+
+}
+
+
+
+// ==========================================
+// LISTA DE PAÍSES VISITADOS
+// ==========================================
+
+function updateCountriesList() {
+
+  const countries = [
+    ...new Set(
+      routes
+        .map(route => route.country)
+        .filter(Boolean)
+    )
+  ];
+
+
+  countryCount.textContent =
+    countries.length;
+
+
+  countryList.innerHTML = "";
+
+
+  countries.forEach(
+    (country, index) => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "countryListItem";
+
+      item.innerHTML = `
+
+        <span class="countryListNumber">
+          ${index + 1}
+        </span>
+
+        <span class="countryListName">
+          ${country}
+        </span>
+
+      `;
+
+      countryList.appendChild(item);
+
+    }
+  );
 
 }
 
